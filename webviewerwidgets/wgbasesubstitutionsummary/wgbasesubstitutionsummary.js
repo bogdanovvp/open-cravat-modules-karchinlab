@@ -58,7 +58,8 @@ widgetGenerators[widgetName] = {
                 i++;
             }
 
-            var secondaryXAxisLabels = ['G>T', 'G>A', 'G>C', 'A>T', 'A>G', 'A>C'];
+            var secondaryXAxisLabels = ['A>C', 'A>G', 'A>T', 'G>C', 'G>A', 'G>T'];
+            var secXAxisLabelIndex = 0;
             var tripletLabelIndex = 0;
             
             var chart = new Chart(chartDiv, {
@@ -120,7 +121,7 @@ widgetGenerators[widgetName] = {
                                     minRotation: 90,
                                     fontSize: 6,
                                     fontColor: 'black',
-                                    padding: -25,
+                                    padding: -25
                                 },
                                 gridLines: {
                                     drawBorder: false,
@@ -135,11 +136,11 @@ widgetGenerators[widgetName] = {
                                 ticks: {
                                     callback:function() {
                                         tripletLabelIndex++;
-
                                         if ((tripletLabelIndex % 16 == 8) && tripletLabelIndex > 96) {
-                                            return secondaryXAxisLabels.pop();
+                                            if (secXAxisLabelIndex == 6) {secXAxisLabelIndex = 0;}
+                                            secXAxisLabelIndex++;
+                                            return secondaryXAxisLabels[secXAxisLabelIndex - 1];
                                         }
-                                        
                                     },
                                     beginAtZero: true,
                                     stepSize: 1.0,
