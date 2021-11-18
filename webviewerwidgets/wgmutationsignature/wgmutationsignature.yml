@@ -1,0 +1,24 @@
+title: Mutation Signature
+version: 2.2.0
+type: webviewerwidget
+requires_opencravat: '>=2.0.2'
+required_annotator: base
+requires:
+- go
+description: Mutation Signature webviewer widget
+developer:
+  name: Rick Kim
+  organization: In Silico Solutions
+  email: support@cravat.us
+  website: http://www.insilico.us.com
+  citation: ''
+release_note:
+  2.2.0: new color scheme
+  2.1.1: bug fix
+  2.1.0: updated data used from go annotator
+  2.0.2: aiosqlite instead of aiosqlite3
+  1.0.8: self-hides if no data
+  1.0.7: aiosqlite3 version
+  1.0.4: auto hide for no coding variant
+tags:
+- visualization
