@@ -9,7 +9,6 @@ from cravat import constants
 import os
 import logging
 import traceback
-import vcf
 from io import StringIO
 import copy
 from pathlib import Path
@@ -54,6 +53,7 @@ class CravatConverter(BaseConverter):
             self.include_info  = set(self.conf['include_info'].split(','))
         else:
             self.include_info = set()
+        import vcf
         reader = vcf.Reader(f, compressed=False)
         self.fix_formats(reader)
         self.open_extra_info(reader)
@@ -127,6 +127,7 @@ class CravatConverter(BaseConverter):
         self.ex_info_writer.write_meta_line('displayname', 'Extra VCF INFO Annotations')
 
     def convert_line(self, l):
+        import vcf
         if l.startswith('#'):
             if self._in_header:
                 self._buffer.write(l)
