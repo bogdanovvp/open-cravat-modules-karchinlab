@@ -49,6 +49,10 @@ class CravatConverter(BaseConverter):
     def setup(self, f):
         if hasattr(self, 'conf') == False:
             self.conf = {}
+        if type(self.conf.get('exclude_info')) == str:
+            self.exclude_info = set(self.conf['exclude_info'].split(','))
+        else:
+            self.exclude_info = set()
         if type(self.conf.get('include_info')) == str:
             self.include_info = set(self.conf['include_info'].split(','))
         else:
@@ -92,7 +96,7 @@ class CravatConverter(BaseConverter):
             'width': 60,
         })
         typemap = {'Integer':'int','Float':'float'}
-        if not reader.infos:
+        if reader.infos:
             for info in reader.infos.values():
                 info_cols.append({
                     'name': info.id,
@@ -118,10 +122,19 @@ class CravatConverter(BaseConverter):
             temp = info_cols
             info_cols = []
             for col in temp:
-                if col['name'] in self.include_info:
+                if col['name'] in self.include_info and col['name'] not in self.exclude_info:
                     col['hidden'] = False
                     info_cols.append(col)
             del temp
+        else:
+            temp = info_cols
+            info_cols = []
+            for col in temp:
+                if col['name'] not in self.exclude_info:
+                    col['hidden'] = False
+                    info_cols.append(col)
+            del temp
+        self.info_cols = [v['name'] for v in info_cols]
         self.ex_info_writer.add_columns(info_cols)
         self.ex_info_writer.write_definition()
         self.ex_info_writer.write_meta_line('name', 'extra_vcf_info')
@@ -306,6 +319,8 @@ class CravatConverter(BaseConverter):
         alt_index = gt-1
         row_data = {'uid':wdict['uid']}
         for info_name, info_val in self.curvar.INFO.items():
+            if info_name not in self.info_cols:
+                continue
             info_desc = self._reader.infos[info_name]
             if info_desc.num == 0:
                 oc_val = self.oc_info_val(info_desc.type, info_val)
