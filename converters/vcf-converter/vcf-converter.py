@@ -50,7 +50,7 @@ class CravatConverter(BaseConverter):
         if hasattr(self, 'conf') == False:
             self.conf = {}
         if type(self.conf.get('include_info')) == str:
-            self.include_info  = set(self.conf['include_info'].split(','))
+            self.include_info = set(self.conf['include_info'].split(','))
         else:
             self.include_info = set()
         import vcf
@@ -65,8 +65,8 @@ class CravatConverter(BaseConverter):
             reader.formats['AD']._replace(num = -3)
 
     def open_extra_info(self, reader):
-        if not reader.infos:
-            return
+        #if not reader.infos:
+        #    return
         writer_path = Path(self.output_dir)/(self.run_name+'.extra_vcf_info.var')
         self.ex_info_writer = CravatWriter(str(writer_path))
         info_cols = [{'name':'uid','title':'UID','type':'int'}]
@@ -92,26 +92,27 @@ class CravatConverter(BaseConverter):
             'width': 60,
         })
         typemap = {'Integer':'int','Float':'float'}
-        for info in reader.infos.values():
-            info_cols.append({
-                'name': info.id,
-                'title': info.id,
-                'desc': info.desc,
-                'type': typemap.get(info.type,'string'),
-                'hidden': True,
-            })
-        if 'CSQ' in reader.infos:
-            csq_info = reader.infos['CSQ']
-            fields_match = re.search(r'Format: ([^\s]+)', csq_info.desc)
-            if fields_match:
-                self.csq_fields = ['CSQ_'+x for x in fields_match.group(1).split('|')]
-                for cname in self.csq_fields:
-                    info_cols.append({
-                        'name': cname,
-                        'title': cname.replace('_',' '),
-                        'type': 'string',
-                        'hidden': True,
-                    })
+        if not reader.infos:
+            for info in reader.infos.values():
+                info_cols.append({
+                    'name': info.id,
+                    'title': info.id,
+                    'desc': info.desc,
+                    'type': typemap.get(info.type,'string'),
+                    'hidden': True,
+                })
+            if 'CSQ' in reader.infos:
+                csq_info = reader.infos['CSQ']
+                fields_match = re.search(r'Format: ([^\s]+)', csq_info.desc)
+                if fields_match:
+                    self.csq_fields = ['CSQ_'+x for x in fields_match.group(1).split('|')]
+                    for cname in self.csq_fields:
+                        info_cols.append({
+                            'name': cname,
+                            'title': cname.replace('_',' '),
+                            'type': 'string',
+                            'hidden': True,
+                        })
         if self.include_info:
             self.include_info.update([c['name'] for c in info_cols[:3]])
             temp = info_cols
