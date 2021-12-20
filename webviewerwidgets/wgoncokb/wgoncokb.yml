@@ -1,0 +1,16 @@
+title: OncoKB
+version: 1.0.0
+type: webviewerwidget
+required_annotator: oncokb
+description: OncoKB webviewer widget
+hidden: true
+developer:
+  name: Madison Larsen
+  organization: In Silico Solutions
+  email: mlarsen@insilico.us.com
+  website: http://www.insilico.us.com
+  citation: ''
+tags:
+- visualization
+requires_opencravat: '>=2.2.2'
+private: true
