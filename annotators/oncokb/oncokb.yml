@@ -96,10 +96,12 @@ output_columns:
 title: OncoKB
 version: 1.0.0
 type: annotator
+requires_opencravat: '>=2.2.8'
 tags:
 - cancer
 requires:
 - wgoncokb
+commercial_warning: 'For commercial use, visit https://www.oncokb.org/account/register.'
 private: true
 
 

@@ -12,5 +12,5 @@ developer:
   citation: ''
 tags:
 - visualization
-requires_opencravat: '>=2.2.2'
+requires_opencravat: '>=2.2.8'
 private: true
