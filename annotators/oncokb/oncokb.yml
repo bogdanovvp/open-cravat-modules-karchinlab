@@ -94,9 +94,9 @@ output_columns:
     type: string
 
 title: OncoKB
-version: 1.0.0
+version: 1.0.1
 type: annotator
-requires_opencravat: '>=2.2.8'
+requires_opencravat: '>=2.2.7'
 tags:
 - cancer
 requires:
