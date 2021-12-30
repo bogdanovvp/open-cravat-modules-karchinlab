@@ -4,10 +4,20 @@ import os
 import datetime
 import xlsxwriter
 import re
+import asyncio
+import sqlite3
 
 class Reporter(CravatReport):
+    MAX_VAR = 1048576
 
     def setup (self):
+        conn = sqlite3.connect(self.dbpath)
+        c = conn.cursor()
+        c.execute("select count(*) from variant")
+        r = c.fetchone()[0]
+        if r > self.MAX_VAR:
+            print("Number of unique variants (", r, ") exceeds Excel's limit on the number of rows,", self.MAX_VAR, "- skipping generating an Excel report")
+            return False
         if self.savepath == None:
             self.savepath = 'cravat_result.xlsx'
         else: 
