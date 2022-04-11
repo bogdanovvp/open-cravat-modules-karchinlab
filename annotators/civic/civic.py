@@ -56,9 +56,16 @@ class CravatAnnotator(BaseAnnotator):
             evidence_link = 'https://civicdb.org/api/variants/{civic_id}/evidence_items?count=5000&page=1'.format(civic_id=civic_id)
             r = requests.get(evidence_link)
             d = json.loads(r.text)
-            diseases = {x['disease']['display_name'] for x in d['records']}
+            diseases = []
+            for x in  d['records']:
+                if 'disease' not in x or x['disease'] is None or 'display_name' not in x['disease']:
+                    continue 
+                disease_name = x['disease']['display_name']
+                if disease_name is not None and disease_name not in diseases:
+                    diseases.append(disease_name)
+
             if len(diseases) > 0:
-                out['diseases'] = ', '.join(sorted(list(diseases)))
+                out['diseases'] = ', '.join(sorted(diseases))
             return out
     
     def cleanup(self):
